@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
+// Controllers
+use App\Http\Controllers\MainController;
+use App\Http\Controllers\Admin\MainController as AdminMainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [MainController::class, 'index'])->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+
+    Route::get('/dashboard', [AdminMainController::class, 'dashboard'])->name('dashboard');
+
+});
 
 require __DIR__.'/auth.php';
